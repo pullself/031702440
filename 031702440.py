@@ -66,7 +66,7 @@ class PeopleInfo:
                 i += 2
             self.__addr.append(ret.group(11).rstrip('.'))
             return self.__addr
-        ret = re.search("([^0-9]+?省|.+?自治区)(.{1,4}?市)((.{1,4}?区|[^0-9]{1,4}?县|.{1,4}?市)?)((.{1,4}?街道|.{1,4}?镇|.{1,4}?乡)?)((.{1,6}?弄|.{1,6}?路|.{1,6}?街|.{1,6}?巷|.{1,6}?道)?)((\d+?号)?)(.*)",
+        ret = re.search("([^0-9]+?省|.+?自治区)(.{1,4}?市|.{4,8}?自治州|.{2,4}?地区|.{2,4}?盟)((.{1,4}?区|[^0-9]{1,4}?县|.{1,4}?市|.{2,6}?旗)?)((.{1,4}?街道|.{1,4}?镇|.{1,4}?乡)?)((.{1,6}?弄|.{1,6}?路|.{1,6}?街|.{1,6}?巷|.{1,6}?道)?)((\d+?号)?)(.*)",
             ad)
         if (ret):
             self.__addr.append(ret.group(1))
@@ -83,6 +83,14 @@ class PeopleInfo:
             if (ret.group(1) != ''):
                 if(ret.group(1)=='香港' or ret.group(1) == '澳门'):
                     self.__addr.append(ret.group(1) + '特别行政区')
+                elif(ret.group(1)=='内蒙古' or ret.group(1)=='西藏'):
+                    self.__addr.append(ret.group(1)+'自治区')
+                elif(ret.group(1)=='广西'):
+                    self.__addr.append(ret.group(1)+'壮族自治区')
+                elif(ret.group(1)=='宁夏'):
+                    self.__addr.append(ret.group(1)+'回族自治区')
+                elif(ret.group(1)=='新疆'):
+                    self.__addr.append(ret.group(1)+'维吾尔自治区')
                 else:
                     self.__addr.append(ret.group(1) + '省')
             else:
