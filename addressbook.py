@@ -2,13 +2,23 @@
 import re
 import json
 from urllib import request, parse
-from base import province, city1, city2, city3, city4, city5, city6, city7, city8, city9
+
+province = r"(河北|山西|辽宁|吉林|黑龙江|江苏|浙江|安徽|福建|江西|山东|河南|湖北|湖南|广东|海南|四川|贵州|云南|陕西|甘肃|青海|台湾|内蒙古|广西|西藏|宁夏|新疆|香港|澳门)"
+city1 = r"(石家庄|唐山|秦皇岛|邯郸|邢台|保定|张家口|承德|沧州|廊坊|衡水|太原|大同|阳泉|长治|晋城|朔州|晋中|运城|忻州|临汾|吕梁|呼和浩特|包头|乌海|赤峰|通辽|鄂尔多斯|呼伦贝尔|巴彦淖尔|乌兰察布|沈阳|大连|鞍山|抚顺|本溪|丹东|锦州|营口|阜新|辽阳|盘锦|铁岭|朝阳|葫芦岛|"
+city2 = r"长春|吉林|四平|辽源|通化|白山|白城|松原|哈尔滨|齐齐哈尔|牡丹江|佳木斯|大庆|伊春|鸡西|鹤岗|双鸭山|七台河|绥化|黑河|南京|无锡|徐州|常州|苏州|南通|宿迁|淮安|盐城|扬州|镇江|泰州|连云港|"
+city3 = r"杭州|宁波|温州|绍兴|湖州|嘉兴|金华|衢州|台州|丽水|舟山|合肥|芜湖|蚌埠|淮南|马鞍山|淮北|铜陵|安庆|黄山|阜阳|宿州|滁州|六安|宣城|池州|亳州|福州|莆田|泉州|厦门|漳州|龙岩|三明|南平|宁德|"
+city4 = r"南昌|赣州|宜春|吉安|上饶|抚州|九江|景德镇|萍乡|新余|鹰潭|济南|青岛|淄博|枣庄|东营|烟台|潍坊|济宁|泰安|威海|日照|滨州|德州|聊城|临沂|菏泽|郑州|开封|洛阳|平顶山|安阳|鹤壁|新乡|焦作|濮阳|许昌|漯河|三门峡|商丘|周口|驻马店|南阳|信阳|"
+city5 = r"武汉|黄石|十堰|荆州|宜昌|襄阳|鄂州|荆门|黄冈|孝感|咸宁|随州|长沙|株洲|湘潭|衡阳|邵阳|岳阳|张家界|益阳|常德|娄底|郴州|永州|怀化|"
+city6 = r"广州|深圳|珠海|汕头|佛山|韶关|湛江|肇庆|江门|茂名|惠州|梅州|汕尾|河源|阳江|清远|东莞|中山|潮州|揭阳|云浮|海口|三亚|三沙|儋州|"
+city7 = r"成都|绵阳|自贡|攀枝花|泸州|德阳|广元|遂宁|内江|乐山|资阳|宜宾|南充|达州|雅安|眉山|巴中|广安|贵阳|遵义|安顺|铜仁|毕节|六盘水|昆明|昭通|曲靖|玉溪|普洱|保山|丽江|临沧|"
+city8 = r"拉萨|昌都|山南|日喀则|那曲|林芝|西安|铜川|宝鸡|咸阳|渭南|汉中|安康|商洛|延安|榆林|兰州|嘉峪关|金昌|白银|天水|酒泉|张掖|武威|定西|陇南|平凉|庆阳|"
+city9 = r"西宁|海东|银川|石嘴山|吴忠|固原|中卫|乌鲁木齐|克拉玛依|吐鲁番|哈密)"
 
 addresslv = ['province', 'city', 'district', 'town', 'street']
 judge = ['县','区','街道','镇','乡','路','道','街','巷']
 
 
-class People_info:
+class PeopleInfo:
     def __init__(self):
         self.__addr = []
         self.__name = ''
@@ -131,17 +141,12 @@ class People_info:
         return self.__addr
 
 
-if __name__ == "__main__":
-    js = []
-    ms = open('input.txt', 'r')
-    for line in ms.readlines():
-        dic = {}
-        t = People_info()
-        t.deal(line)
-        # s = "1!小陈,广东省东莞市凤岗13965231525镇凤平路13号."
-        dic.update({'姓名': t.get_name()})
-        dic.update({'手机': t.get_tel()})
-        dic.update({'地址': t.get_addr()})
-        js.append(dic)
-    with open('output.json', 'w', encoding='utf-8') as f:
-        output = json.dump(js, f, ensure_ascii=False)
+x = input()
+dic = {}
+t = PeopleInfo()
+t.deal(x)
+dic.update({'姓名': t.get_name()})
+dic.update({'手机': t.get_tel()})
+dic.update({'地址': t.get_addr()})
+js = json.dumps(dic,ensure_ascii=False)
+print(js)
