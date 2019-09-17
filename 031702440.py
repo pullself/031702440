@@ -120,7 +120,7 @@ class PeopleInfo:
             self.__addr.append(s)
         elif (lv == 3):
             data = []
-            items = {'keywords': s.strip('.'), 'output': 'json','offset':'1', 'key': 'fb4598362a6784eaaf006e6e07a66f4a'}
+            items = {'keywords': ad.strip('.'), 'output': 'json','offset':'1', 'key': 'fb4598362a6784eaaf006e6e07a66f4a'}
             res = requests.get('https://restapi.amap.com/v3/place/text?',params=items)
             items = {'location': res.json()['pois'][0]['location'], 'output': 'json','extensions':'all', 'key': 'fb4598362a6784eaaf006e6e07a66f4a'}
             res = requests.get('https://restapi.amap.com/v3/geocode/regeo?',params=items)
