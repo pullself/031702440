@@ -14,7 +14,6 @@ city7 = u"成都|绵阳|自贡|攀枝花|泸州|德阳|广元|遂宁|内江|乐�
 city8 = u"拉萨|昌都|山南|日喀则|那曲|林芝|西安|铜川|宝鸡|咸阳|渭南|汉中|安康|商洛|延安|榆林|兰州|嘉峪关|金昌|白银|天水|酒泉|张掖|武威|定西|陇南|平凉|庆阳|"
 city9 = u"西宁|海东|银川|石嘴山|吴忠|固原|中卫|乌鲁木齐|克拉玛依|吐鲁番|哈密)"
 
-addresslv = ['province', 'city', 'district', 'town', 'street']
 judge = ['县','区','街道','镇','乡','路','道','街','巷']
 
 class PeopleInfo:
@@ -119,23 +118,29 @@ class PeopleInfo:
             self.__addr = self.__addr[:4]
             self.__addr.append(s)
         elif (lv == 3):
-            ret = re.search(r"\d+?号", ad)
-            if (ret):
-                ad = ad.replace(ret.group(0), '')
-            url = 'http://api.map.baidu.com/place/v2/search?' + 'query=' + parse.quote(ad.rstrip('.')) + '&region=' + parse.quote('全国') + '&ak=hrbEuMUarmqy4EFtskzLpl0OgbOjZRGv&output=json'
+            data = []
+            url = "https://restapi.amap.com/v3/place/text?"+"keywords="+parse.quote(ad.rstrip('.'))+"&output=json&offset=1&key=fb4598362a6784eaaf006e6e07a66f4a&extensions=all"
             res = request.urlopen(url)
             res = json.loads(res.read().decode('utf-8'))
-            # print(res)
-            lat = res['results'][0]['location']['lat']
-            lng = res['results'][0]['location']['lng']
-            url = 'http://api.map.baidu.com/reverse_geocoding/v3/?location={},{}&ak=hrbEuMUarmqy4EFtskzLpl0OgbOjZRGv&output=json'.format(lat, lng)
+            url = "https://restapi.amap.com/v3/geocode/regeo?output=json&location={}&key=fb4598362a6784eaaf006e6e07a66f4a&extensions=all".format(res['pois'][0]['location'])
             res = request.urlopen(url)
             res = json.loads(res.read().decode('utf-8'))
-            for i in range(5):
+            data.append(res['regeocode']['addressComponent']['province'])
+            if(data[0]=='北京市' or data[0]=='上海市' or data[0]=='天津市' or data[0]=='重庆市'):
+                data[0] = data[0].strip('市')
+            if(res['regeocode']['addressComponent']['city']==[]):
+                data.append('')
+            else:
+                data.append(res['regeocode']['addressComponent']['city'])
+            data.append(res['regeocode']['addressComponent']['district'])
+            data.append(res['regeocode']['addressComponent']['township'])
+            data.append(res['regeocode']['addressComponent']['streetNumber']['street'])
+            data.append(res['regeocode']['addressComponent']['streetNumber']['number'])
+            data.append(res['regeocode']['addressComponent']['building']['name'])
+            for i in range(7):
                 if (self.__addr[i] == ''):
-                    if (res['result']['addressComponent'][addresslv[i]] != ''):
-                        self.__addr[i] = res['result']['addressComponent'][addresslv[i]]
-            # print(res)
+                    if (data[i] != ''):
+                        self.__addr[i] = data[i]
         return self.__addr
 
     def get_name(self):
