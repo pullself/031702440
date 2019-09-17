@@ -21,7 +21,7 @@ class PeopleInfo:
         self.__addr = []
         self.__name = ''
         self.__tel = ''
-    
+
     def deal(self,ad):
         lv = ad[0]
         ad = ad[2:]
