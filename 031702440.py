@@ -2,7 +2,6 @@
 import re
 import json
 from urllib import request, parse
-import requests
 
 province = u"(河北|山西|辽宁|吉林|黑龙江|江苏|浙江|安徽|福建|江西|山东|河南|湖北|湖南|广东|海南|四川|贵州|云南|陕西|甘肃|青海|台湾|内蒙古|广西|西藏|宁夏|新疆|香港|澳门)"
 city1 = u"(石家庄|唐山|秦皇岛|邯郸|邢台|保定|张家口|承德|沧州|廊坊|衡水|太原|大同|阳泉|长治|晋城|朔州|晋中|运城|忻州|临汾|吕梁|呼和浩特|包头|乌海|赤峰|通辽|鄂尔多斯|呼伦贝尔|巴彦淖尔|乌兰察布|沈阳|大连|鞍山|抚顺|本溪|丹东|锦州|营口|阜新|辽阳|盘锦|铁岭|朝阳|葫芦岛|"
@@ -120,11 +119,12 @@ class PeopleInfo:
             self.__addr.append(s)
         elif (lv == 3):
             data = []
-            items = {'keywords': ad.strip('.'), 'output': 'json','offset':'1', 'key': 'fb4598362a6784eaaf006e6e07a66f4a'}
-            res = requests.get('https://restapi.amap.com/v3/place/text?',params=items)
-            items = {'location': res.json()['pois'][0]['location'], 'output': 'json','extensions':'all', 'key': 'fb4598362a6784eaaf006e6e07a66f4a'}
-            res = requests.get('https://restapi.amap.com/v3/geocode/regeo?',params=items)
-            res = res.json()
+            url = "https://restapi.amap.com/v3/place/text?"+"keywords="+parse.quote(ad.rstrip('.'))+"&output=json&offset=1&key=fb4598362a6784eaaf006e6e07a66f4a&extensions=all"
+            res = request.urlopen(url)
+            res = json.loads(res.read().decode('utf-8'))
+            url = "https://restapi.amap.com/v3/geocode/regeo?output=json&location={}&key=fb4598362a6784eaaf006e6e07a66f4a&extensions=all".format(res['pois'][0]['location'])
+            res = request.urlopen(url)
+            res = json.loads(res.read().decode('utf-8'))
             data.append(res['regeocode']['addressComponent']['province'])
             if(data[0]=='北京市' or data[0]=='上海市' or data[0]=='天津市' or data[0]=='重庆市'):
                 data[0] = data[0].strip('市')
