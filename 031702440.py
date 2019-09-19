@@ -29,15 +29,15 @@ class PeopleInfo:
         try:
             ad = self.set_name(ad)
         except AttributeError:
-            print("'" + ad + "'" + ":姓名输入格式不符合规范")
+            pass
         try:
             ad = self.set_tel(ad)
         except AttributeError:
-            print("'" + ad + "'" + ":手机输入格式不符合规范")
+            pass
         try:
             self.set_addr(ad, int(lv))
         except AttributeError:
-            print("'" + ad + "'" + ":地址输入格式不符合规范")
+            pass
         return self.__addr
 
     def set_name(self, ad):
