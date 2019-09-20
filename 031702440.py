@@ -76,7 +76,7 @@ class PeopleInfo:
                 i += 2
             self.__addr.append(ret.group(11).rstrip('.'))
             return self.__addr
-        ret = re.search("("+province+ "?)" + "([省]?)" + "(" + city1 + city2 + city3 + city4 + city5 + city6 + city7 + city8 + city9 + "?)" + r"([市]?)((.{0,4}?区|[^0-9]{0,4}?县|.{0,4}?市)?)((.{0,4}?街道|.{0,4}?镇|.{0,4}?乡)?)((.{0,6}?路|.{0,6}?街|.{0,6}?巷|.{0,6}?道)?)((\d+?号)?)(.*)",
+        ret = re.search("("+province+ "?)" + "((省|自治区)?)" + "(" + city1 + city2 + city3 + city4 + city5 + city6 + city7 + city8 + city9 + "?)" + r"([市]?)((.{0,4}?区|[^0-9]{0,4}?县|.{0,4}?市)?)((.{0,4}?街道|.{0,4}?镇|.{0,4}?乡)?)((.{0,6}?路|.{0,6}?街|.{0,6}?巷|.{0,6}?道)?)((\d+?号)?)(.*)",
             ad)
         if (ret):
             if (ret.group(1) != ''):
@@ -94,12 +94,12 @@ class PeopleInfo:
                     self.__addr.append(ret.group(1) + '省')
             else:
                 self.__addr.append(ret.group(1))
-            if (ret.group(4) != ''):
-                self.__addr.append(ret.group(4) + '市')
+            if (ret.group(5) != ''):
+                self.__addr.append(ret.group(5) + '市')
             else:
-                self.__addr.append(ret.group(4))
-            i = 7
-            while (i < 15):
+                self.__addr.append(ret.group(5))
+            i = 8
+            while (i < 16):
                 # print(ret.group(i))
                 if ret.group(i) in judge:
                     self.__addr.append(self.__addr[1].replace('市',ret.group(i)))
@@ -107,7 +107,7 @@ class PeopleInfo:
                 else:
                     self.__addr.append(ret.group(i))
                 i += 2
-            self.__addr.append(ret.group(15).rstrip('.'))
+            self.__addr.append(ret.group(16).rstrip('.'))
             # print(self.__addr)
             return self.__addr
 
